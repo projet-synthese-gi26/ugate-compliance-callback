@@ -1,26 +1,63 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  Configuration du Thème (Tailwind v4)
+  Ici on définit nos couleurs personnalisées directement via des variables CSS.
+  Tailwind va automatiquement créer les classes utilitaires correspondantes
+  (ex: bg-ugate-600, text-ugate-900, border-success, etc.)
+*/
+
+@theme {
+    /* --- PALETTE UGATE (Dominante Bleue) --- */
+
+    /* Fond très léger, presque blanc (pour les cartes et zones secondaires) */
+    --color-ugate-50: #eff6ff;
+
+    /* Bleu très clair (pour les bordures subtiles ou les hovers) */
+    --color-ugate-100: #dbeafe;
+
+    /* Bleu Standard (Icônes, liens secondaires) */
+    --color-ugate-500: #3b82f6;
+
+    /* Bleu Primaire (BOUTONS D'ACTION, CTA) -> Le cœur de ton 40% */
+    --color-ugate-600: #2563eb;
+
+    /* Bleu Profond (Texte fort, Titres secondaires) */
+    --color-ugate-800: #1e40af;
+
+    /* Bleu Nuit (Contrastes forts, En-têtes, Footer) */
+    --color-ugate-900: #1e3a8a;
+
+
+    /* --- PALETTE ÉTATS (Feedback UX) --- */
+
+    /* Vert émeraude : Succès / Validé */
+    --color-success: #10b981;
+
+    /* Rouge soft : Erreur / Bloquant */
+    --color-error: #ef4444;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/*
+  Styles de base globaux
+  On applique ici la règle du 60% Blanc pour le fond général
+*/
+@layer base {
+    body {
+        /* Le fond par défaut est un gris très très clair (presque blanc) pour éviter la fatigue visuelle du #FFFFFF pur */
+        background-color: #f8fafc;
+        color: #1e293b; /* Gris foncé pour le texte (plus lisible que le noir pur) */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/*
+  Utilitaires personnalisés (Optionnel)
+  Pour l'effet "Glassmorphism" moderne
+*/
+@utility glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
 }
