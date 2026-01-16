@@ -1,8 +1,12 @@
-// src/app/layout.tsx
 import "./globals.css";
-import { Inter } from "next/font/google"; // ou Geist
+import { Inter } from "next/font/google"; // 1. IMPORT
+import { ThemeProvider } from "@/components/ThemeProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+
+const inter = Inter({
+    subsets: ["latin"],
+    display: "swap",
+});
 
 export default function RootLayout({
                                        children,
@@ -10,9 +14,16 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="fr">
-        <body className={`${inter.className} antialiased bg-gray-50 text-slate-900`}>
-        {children}
+        <html lang="fr" suppressHydrationWarning>
+        <body className={`${inter.className} antialiased bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-slate-300 transition-colors duration-300`}>
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
+            {children}
+        </ThemeProvider>
         </body>
         </html>
     );

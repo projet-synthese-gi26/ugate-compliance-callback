@@ -1,61 +1,39 @@
 @import "tailwindcss";
 
-/*
-  Configuration du Thème (Tailwind v4)
-  Ici on définit nos couleurs personnalisées directement via des variables CSS.
-  Tailwind va automatiquement créer les classes utilitaires correspondantes
-  (ex: bg-ugate-600, text-ugate-900, border-success, etc.)
-*/
+/* 🚨 LIGNE CRUCIALE POUR TAILWIND V4 + NEXT-THEMES */
+/* Elle dit à Tailwind : "Active le mode dark quand la classe .dark est présente sur le HTML" */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    /* --- PALETTE UGATE (Dominante Bleue) --- */
-
-    /* Fond très léger, presque blanc (pour les cartes et zones secondaires) */
+    /* Tes couleurs UGate */
     --color-ugate-50: #eff6ff;
-
-    /* Bleu très clair (pour les bordures subtiles ou les hovers) */
     --color-ugate-100: #dbeafe;
-
-    /* Bleu Standard (Icônes, liens secondaires) */
     --color-ugate-500: #3b82f6;
-
-    /* Bleu Primaire (BOUTONS D'ACTION, CTA) -> Le cœur de ton 40% */
     --color-ugate-600: #2563eb;
-
-    /* Bleu Profond (Texte fort, Titres secondaires) */
     --color-ugate-800: #1e40af;
-
-    /* Bleu Nuit (Contrastes forts, En-têtes, Footer) */
     --color-ugate-900: #1e3a8a;
-
-
-    /* --- PALETTE ÉTATS (Feedback UX) --- */
-
-    /* Vert émeraude : Succès / Validé */
     --color-success: #10b981;
-
-    /* Rouge soft : Erreur / Bloquant */
     --color-error: #ef4444;
 }
 
-/*
-  Styles de base globaux
-  On applique ici la règle du 60% Blanc pour le fond général
-*/
 @layer base {
+    /*
+       DÉFINITION DES COULEURS PAR DÉFAUT
+       Light Mode est le défaut. Dark Mode écrase les valeurs.
+    */
     body {
-        /* Le fond par défaut est un gris très très clair (presque blanc) pour éviter la fatigue visuelle du #FFFFFF pur */
-        background-color: #f8fafc;
-        color: #1e293b; /* Gris foncé pour le texte (plus lisible que le noir pur) */
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        @apply bg-slate-50 text-slate-900; /* Mode Clair par défaut */
+        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
+    }
+
+    /* Quand la classe .dark est active sur le body (via next-themes) */
+    .dark body {
+        @apply bg-[#020617] text-slate-300; /* Mode Sombre activé */
     }
 }
 
-/*
-  Utilitaires personnalisés (Optionnel)
-  Pour l'effet "Glassmorphism" moderne
-*/
 @utility glass {
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(10px);

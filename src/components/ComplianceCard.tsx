@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { OfficialProfile, ComplianceResponse } from '@/lib/types';
+import { OfficialProfile, ComplianceResponse } from '@/lib/type';
 import Image from 'next/image';
 import {
     BadgeCheck, Eye, ShieldCheck, AlertTriangle, HeartPulse,
@@ -64,9 +64,7 @@ export default function ComplianceDashboard({ profile, compliance, redirectUrl }
             >
                 <div className="bg-white rounded-[24px] shadow-[0_20px_40px_-12px_rgba(0,0,0,0.08)] border border-slate-100 flex flex-col lg:flex-row overflow-hidden ring-1 ring-slate-900/5">
 
-                    {/* =======================================================
-            COLONNE GAUCHE : IDENTITÉ (Épurée)
-           ======================================================= */}
+
                     <div className="w-full lg:w-[360px] bg-slate-50/30 p-8 flex flex-col items-center text-center border-r border-slate-100">
 
                         {/* Avatar */}
@@ -224,9 +222,9 @@ export default function ComplianceDashboard({ profile, compliance, redirectUrl }
     );
 }
 
-// --- TUILE RAFFINÉE (Minimaliste) ---
+
 function CleanTile({ label, isValid, icon, detail, isWarning, theme }: any) {
-    // Détermination de la couleur de l'icône (Subtil)
+
     const statusColor = isValid ? 'text-teal-600' : isWarning ? 'text-amber-600' : 'text-rose-600';
     const statusBg = isValid ? 'bg-teal-50' : isWarning ? 'bg-amber-50' : 'bg-rose-50';
 
