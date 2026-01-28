@@ -108,9 +108,7 @@ export default function ComplianceDashboard({ profile, compliance, redirectUrl }
                         </button>
                     </div>
 
-                    {/* =======================================================
-            COLONNE DROITE : DASHBOARD (Sophistiqué)
-           ======================================================= */}
+
                     <div className="flex-1 flex flex-col bg-white">
 
                         {/* 1. HEADER STATUT (Gradient sombre élégant) */}

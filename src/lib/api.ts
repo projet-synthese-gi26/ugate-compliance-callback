@@ -1,4 +1,4 @@
-import { ComplianceResponse, OfficialProfile } from './types';
+import { ComplianceResponse, OfficialProfile } from './type';
 import {
     MOCK_PROFILE_VALID, MOCK_COMPLIANCE_VALID,
     MOCK_PROFILE_INVALID, MOCK_COMPLIANCE_INVALID,

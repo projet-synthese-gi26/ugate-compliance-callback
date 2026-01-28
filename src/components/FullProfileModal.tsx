@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FileText, Download, Maximize2, ChevronRight, UserSquare2, CarFront, ShieldCheck, ScanLine, ZoomIn } from 'lucide-react';
-import { OfficialProfile } from '@/lib/types';
+import { OfficialProfile } from '../lib/type';
 import Image from 'next/image';
 
 interface Props {

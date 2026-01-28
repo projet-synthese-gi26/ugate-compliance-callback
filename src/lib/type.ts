@@ -7,7 +7,6 @@ export interface OfficialProfile {
     lastName: string;
     photoUrl: string;
 
-    // Documents & Conformité
     cvUrl?: string;
     cniNumber: string;       // ex: "102938475"
     cniRectoUrl?: string;
