@@ -1,5 +1,5 @@
 // src/lib/mock-data.ts
-import { ComplianceResponse, OfficialProfile } from './types';
+import { ComplianceResponse, OfficialProfile } from './type';
 
 export const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 

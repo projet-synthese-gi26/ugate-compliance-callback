@@ -3,6 +3,9 @@
 /* 🚨 LIGNE CRUCIALE POUR TAILWIND V4 + NEXT-THEMES */
 /* Elle dit à Tailwind : "Active le mode dark quand la classe .dark est présente sur le HTML" */
 @custom-variant dark (&:where(.dark, .dark *));
+@tailwind components;
+@tailwind utilities;
+
 
 @theme {
     /* Tes couleurs UGate */
@@ -38,4 +41,12 @@
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+@layer base {
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    }
 }
