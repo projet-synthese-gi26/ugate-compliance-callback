@@ -5,8 +5,8 @@ import {
     delay
 } from './mock-data';
 
-// Utilisation de 127.0.0.1 par défaut pour éviter les problèmes de résolution DNS Node.js
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8091';
+
+const API_BASE_URL ='https://ugate.pynfi.com';
 
 // Liste des IDs de test pour la démo
 const MOCK_IDS = ['driver-123', 'driver-456', 'mock-valid', 'mock-invalid'];

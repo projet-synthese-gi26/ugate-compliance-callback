@@ -3,7 +3,7 @@
 CONTEXTE DU PROJET NEXT.JS
 ================================================================================
 Projet: ugate-compliance
-Date de génération: 2026-01-16T09:04:42.036Z
+Date de génération: 2026-02-01T13:15:44.033Z
 Chemin: D:\Projets\Scolaire\Reseau\New Version\ugate-compliance
 Framework: Next.js
 TypeScript: Oui
@@ -25,6 +25,7 @@ ugate-compliance/
 ├── package-lock.json ⭐
 ├── package.json ⭐
 ├── postcss.config.mjs ⭐
+├── project-context.txt
 ├── public/ 📁
 │   ├── file.svg
 │   ├── globe.svg
@@ -33,21 +34,25 @@ ugate-compliance/
 │   └── window.svg
 ├── src/ 📁
 │   ├── app/ 📁
-│   │   ├── api-ref/
+│   │   ├── (public)/
+│   │   │   ├── api-ref/
+│   │   │   │   └── page.tsx
+│   │   │   ├── docs/
+│   │   │   │   └── page.tsx
+│   │   │   ├── layout.tsx
 │   │   │   └── page.tsx
 │   │   ├── connect/
 │   │   │   ├── AutoRedirect.tsx
 │   │   │   ├── loading.tsx
 │   │   │   └── page.tsx
-│   │   ├── docs/
-│   │   │   └── page.tsx
 │   │   ├── favicon.ico
 │   │   ├── globals.css
-│   │   ├── layout.tsx
-│   │   └── page.tsx
+│   │   └── layout.tsx
 │   ├── components/ 📁
 │   │   ├── ComplianceCard.tsx
 │   │   ├── FullProfileModal.tsx
+│   │   ├── ThemeProvider.tsx
+│   │   ├── ThemeToggle.tsx
 │   │   ├── UGatePromoBanner.tsx
 │   │   └── ui/
 │   │       ├── CheckListItem.tsx
@@ -56,6 +61,7 @@ ugate-compliance/
 │       ├── api.ts
 │       ├── mock-data.ts
 │       └── type.ts
+├── tsconfig.build.json
 └── tsconfig.json ⭐
 
 ================================================================================
@@ -530,7 +536,7 @@ export default nextConfig;
 ────────────────────────────────────────────────────────────────────────────────
 FICHIER: package-lock.json
 TYPE: .json
-TAILLE: 224.72 KB
+TAILLE: 225.20 KB
 ────────────────────────────────────────────────────────────────────────────────
 {
   "name": "ugate-compliance",
@@ -546,6 +552,7 @@ TAILLE: 224.72 KB
         "framer-motion": "^12.23.26",
         "lucide-react": "^0.562.0",
         "next": "16.1.1",
+        "next-themes": "^0.4.6",
         "react": "19.2.3",
         "react-dom": "19.2.3",
         "tailwind-merge": "^3.4.0"
@@ -5610,6 +5617,16 @@ TAILLE: 224.72 KB
         }
       }
     },
+    "node_modules/next-themes": {
+      "version": "0.4.6",
+      "resolved": "https://registry.npmjs.org/next-themes/-/next-themes-0.4.6.tgz",
+      "integrity": "sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==",
+      "license": "MIT",
+      "peerDependencies": {
+        "react": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc",
+        "react-dom": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc"
+      }
+    },
     "node_modules/next/node_modules/postcss": {
       "version": "8.4.31",
       "resolved": "https://registry.npmjs.org/postcss/-/postcss-8.4.31.tgz",
@@ -7161,7 +7178,7 @@ TAILLE: 224.72 KB
 ────────────────────────────────────────────────────────────────────────────────
 FICHIER: package.json
 TYPE: .json
-TAILLE: 702 B
+TAILLE: 731 B
 ────────────────────────────────────────────────────────────────────────────────
 {
   "name": "ugate-compliance",
@@ -7178,6 +7195,7 @@ TAILLE: 702 B
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
+    "next-themes": "^0.4.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "tailwind-merge": "^3.4.0"
@@ -7213,18 +7231,16 @@ export default config;
 
 
 ────────────────────────────────────────────────────────────────────────────────
-FICHIER: src\app\api-ref\page.tsx
+FICHIER: src\app\(public)\api-ref\page.tsx
 TYPE: .tsx
-TAILLE: 15.66 KB
+TAILLE: 13.18 KB
 ────────────────────────────────────────────────────────────────────────────────
 'use client';
 
 import { useState } from 'react';
-import { ShieldCheck, Copy, Check, ChevronRight, Hash, Box, Layers, Globe } from 'lucide-react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { Copy, Check, Layers } from 'lucide-react';
 
-// --- TYPES DE DONNÉES (Simulant ton Swagger) ---
+// --- TYPES DE DONNÉES (Identiques) ---
 type Endpoint = {
     method: 'GET' | 'POST' | 'PUT' | 'DELETE';
     path: string;
@@ -7263,217 +7279,163 @@ const apiData: Record<string, Endpoint[]> = {
                 }
             ]
         },
-        {
-            method: 'GET',
-            path: '/compliance/details/{driverId}',
-            summary: "Récupérer le Jumeau Numérique",
-            description: "Récupère les données certifiées par le syndicat (Nom légal, Photo officielle, Véhicule déclaré) pour affichage client.",
-            params: [
-                { name: 'driverId', type: 'uuid', required: true, desc: "L'identifiant unique du chauffeur." }
-            ],
-            responses: [
-                {
-                    code: 200,
-                    desc: "OK - Profil trouvé",
-                    json: { id: "driver-123", firstName: "Jean", lastName: "EKTO", photoUrl: "https://...", isVerified: true }
-                }
-            ]
-        },
-        {
-            method: 'POST',
-            path: '/compliance/feedback',
-            summary: "Soumettre un avis ou signalement",
-            description: "Permet de transmettre un feedback (Note, Commentaire, Incident grave) vers le dossier syndical.",
-            body: [
-                { name: 'driverId', type: 'uuid', required: true, desc: "ID du chauffeur concerné." },
-                { name: 'rating', type: 'integer (1-5)', required: true, desc: "Note attribuée." },
-                { name: 'severity', type: 'string', required: false, desc: "Niveau (LOW, MEDIUM, HIGH)." },
-                { name: 'comment', type: 'string', required: false, desc: "Détails de l'incident." }
-            ],
-            responses: [
-                {
-                    code: 202,
-                    desc: "Accepted - Traitement asynchrone",
-                    json: { status: "ACCEPTED", ticketId: "tkt-998877" }
-                }
-            ]
-        }
+        // ... (Autres endpoints identiques, j'abrège pour la réponse, garde tes données)
     ],
     "Syndicats": [
         {
             method: 'GET',
             path: '/syndicates',
             summary: "Lister les syndicats",
-            description: "Récupère une liste paginée des syndicats enregistrés sur la plateforme.",
-            params: [
-                { name: 'page', type: 'integer', required: false, desc: "Numéro de page (défaut 0)." },
-                { name: 'size', type: 'integer', required: false, desc: "Éléments par page (défaut 10)." }
-            ],
-            responses: [
-                {
-                    code: 200,
-                    desc: "OK",
-                    json: { content: [{ id: "syn-1", name: "Syndicat A" }], page: 0, totalPages: 5 }
-                }
-            ]
+            description: "Récupère une liste paginée des syndicats.",
+            params: [ { name: 'page', type: 'integer', required: false, desc: "Numéro de page." } ],
+            responses: [ { code: 200, desc: "OK", json: { content: [{ id: "syn-1", name: "Syndicat A" }] } } ]
         }
     ]
 };
 
 // --- COMPOSANT MAIN ---
 export default function ApiReferencePage() {
-    const [activeTab, setActiveTab] = useState('curl'); // curl | node | python
+    const [activeTab, setActiveTab] = useState('curl');
 
     return (
-        <div className="min-h-screen bg-[#020617] text-slate-300 font-sans selection:bg-blue-500/30">
+        // GLOBAL CONTAINER: Blanc (Light) / Noir (Dark)
+        <div className="min-h-screen bg-slate-50 dark:bg-[#020617] text-slate-600 dark:text-slate-300 font-sans selection:bg-blue-500/30 transition-colors duration-300 flex">
 
-            {/* NAVBAR FIXE (Copie conforme des autres pages) */}
-            <nav className="fixed top-0 left-0 right-0 h-16 bg-[#020617]/90 backdrop-blur-xl border-b border-white/5 z-50 flex items-center px-6 lg:px-8 justify-between">
-                <Link href="/" className="flex items-center gap-3 group">
-                    <div className="w-8 h-8 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
-                        <ShieldCheck size={18} />
+            {/* 1. SIDEBAR NAVIGATION (Sticky Left) */}
+            <aside className="hidden lg:block w-64 fixed top-20 bottom-0 left-0 border-r border-slate-200 dark:border-white/5 bg-white dark:bg-[#020617] overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-white/10 transition-colors duration-300">
+                {Object.entries(apiData).map(([category, endpoints]) => (
+                    <div key={category} className="mb-8">
+                        <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <Layers size={12} /> {category}
+                        </h3>
+                        <ul className="space-y-1">
+                            {endpoints.map((ep, i) => (
+                                <li key={i}>
+                                    <a href={`#${ep.method}-${ep.path}`} className="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-colors text-xs font-mono text-slate-600 dark:text-slate-400 dark:hover:text-white truncate">
+                                        <span className={`w-1.5 h-1.5 rounded-full ${ep.method === 'GET' ? 'bg-blue-500' : 'bg-emerald-500'}`}></span>
+                                        {ep.path}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-                    <span className="font-bold text-white tracking-tight">UGate <span className="text-slate-600">Ref</span></span>
-                </Link>
-                <Link href="/docs" className="text-xs font-bold text-slate-400 hover:text-white transition-colors">
-                    Retour Documentation
-                </Link>
-            </nav>
+                ))}
+            </aside>
 
-            <div className="pt-16 flex">
+            {/* 2. MAIN CONTENT & 3. CODE COLUMN */}
+            <main className="lg:ml-64 w-full grid grid-cols-1 xl:grid-cols-2 pt-8">
 
-                {/* 1. SIDEBAR NAVIGATION (Sticky Left) */}
-                <aside className="hidden lg:block w-64 fixed top-16 bottom-0 left-0 border-r border-white/5 bg-[#020617] overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/10">
+                {/* COLUMN 2 : DESCRIPTIONS (Scrollable) */}
+                <div className="p-8 lg:p-12 xl:border-r border-slate-200 dark:border-white/5 min-h-screen">
+                    <div className="mb-12">
+                        <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">API Reference</h1>
+                        <p className="text-slate-600 dark:text-slate-400 text-lg font-light leading-relaxed">
+                            Bienvenue sur la référence technique complète de l'API UGate.
+                            Toutes les réponses sont au format JSON. L'URL de base est <code className="text-slate-800 dark:text-white bg-slate-200 dark:bg-white/10 px-1 py-0.5 rounded text-sm">https://api.ugate.io/v1</code>.
+                        </p>
+                    </div>
+
                     {Object.entries(apiData).map(([category, endpoints]) => (
-                        <div key={category} className="mb-8">
-                            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                <Layers size={12} /> {category}
-                            </h3>
-                            <ul className="space-y-1">
-                                {endpoints.map((ep, i) => (
-                                    <li key={i}>
-                                        <a href={`#${ep.method}-${ep.path}`} className="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-xs font-mono text-slate-400 hover:text-white truncate">
-                                            <span className={`w-1.5 h-1.5 rounded-full ${ep.method === 'GET' ? 'bg-blue-500' : 'bg-emerald-500'}`}></span>
-                                            {ep.path}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
+                        <div key={category} className="mb-20">
+                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8 border-b border-slate-200 dark:border-white/10 pb-4">{category}</h2>
+
+                            {endpoints.map((ep, idx) => (
+                                <div key={idx} id={`${ep.method}-${ep.path}`} className="mb-20 scroll-mt-24 group">
+                                    {/* Header Endpoint */}
+                                    <div className="flex items-start gap-4 mb-4">
+                                        <span className={`px-2 py-1 rounded text-xs font-bold ${
+                                            ep.method === 'GET'
+                                                ? 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20'
+                                                : 'bg-emerald-100 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
+                                        }`}>
+                                            {ep.method}
+                                        </span>
+                                        <h3 className="font-mono text-lg text-slate-900 dark:text-white font-medium break-all">{ep.path}</h3>
+                                    </div>
+
+                                    <p className="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">{ep.description}</p>
+
+                                    {/* TABLEAU PARAMETRES */}
+                                    {(ep.params || ep.body) && (
+                                        <div className="mb-8">
+                                            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">
+                                                {ep.body ? 'Body Parameters' : 'Query Parameters'}
+                                            </h4>
+                                            <div className="border-t border-slate-200 dark:border-white/10">
+                                                {[...(ep.params || []), ...(ep.body || [])].map((param, pIdx) => (
+                                                    <div key={pIdx} className="py-4 border-b border-slate-200 dark:border-white/10 grid grid-cols-12 gap-4">
+                                                        <div className="col-span-4 font-mono text-sm text-blue-600 dark:text-blue-300">
+                                                            {param.name}
+                                                            {param.required && <span className="ml-2 text-[10px] text-rose-500 font-bold uppercase">Required</span>}
+                                                        </div>
+                                                        <div className="col-span-8">
+                                                            <div className="text-xs text-slate-500 font-mono mb-1">{param.type}</div>
+                                                            <div className="text-sm text-slate-600 dark:text-slate-400">{param.desc}</div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
                         </div>
                     ))}
-                </aside>
+                </div>
 
-                {/* 2. MAIN CONTENT & 3. CODE COLUMN */}
-                <main className="lg:ml-64 w-full grid grid-cols-1 xl:grid-cols-2">
+                {/* COLUMN 3 : CODE EXAMPLES (Sticky)
+                    Note: Cette colonne reste sombre ("Dark Theme") même en mode Light
+                    pour préserver la coloration syntaxique habituelle des devs.
+                */}
+                <div className="hidden xl:block bg-[#0B1121] border-l border-slate-200 dark:border-white/5 sticky top-20 h-[calc(100vh-80px)] overflow-y-auto p-8 lg:p-12 scrollbar-thin scrollbar-thumb-white/10">
+                    <div className="space-y-20">
+                        {/* Intro Spacer */}
+                        <div className="h-32"></div>
 
-                    {/* COLUMN 2 : DESCRIPTIONS (Scrollable) */}
-                    <div className="p-8 lg:p-12 xl:border-r border-white/5 min-h-screen">
-                        <div className="mb-12">
-                            <h1 className="text-4xl font-bold text-white mb-4">API Reference</h1>
-                            <p className="text-slate-400 text-lg font-light leading-relaxed">
-                                Bienvenue sur la référence technique complète de l'API UGate.
-                                Toutes les réponses sont au format JSON. L'URL de base est <code className="text-white bg-white/10 px-1 py-0.5 rounded text-sm">https://api.ugate.io/v1</code>.
-                            </p>
-                        </div>
+                        {Object.values(apiData).flat().map((ep, idx) => (
+                            <div key={idx} className="mb-32">
+                                {/* Onglets Code */}
+                                <div className="flex items-center gap-4 mb-4 border-b border-white/10 pb-2">
+                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest mr-auto">Exemple de requête</span>
+                                    <button className={`text-xs font-bold hover:text-white transition-colors ${activeTab === 'curl' ? 'text-white' : 'text-slate-600'}`} onClick={() => setActiveTab('curl')}>cURL</button>
+                                    <button className={`text-xs font-bold hover:text-white transition-colors ${activeTab === 'node' ? 'text-white' : 'text-slate-600'}`} onClick={() => setActiveTab('node')}>Node.js</button>
+                                </div>
 
-                        {Object.entries(apiData).map(([category, endpoints]) => (
-                            <div key={category} className="mb-20">
-                                <h2 className="text-2xl font-bold text-white mb-8 border-b border-white/10 pb-4">{category}</h2>
-
-                                {endpoints.map((ep, idx) => (
-                                    <div key={idx} id={`${ep.method}-${ep.path}`} className="mb-20 scroll-mt-24 group">
-                                        {/* Header Endpoint */}
-                                        <div className="flex items-start gap-4 mb-4">
-                                    <span className={`px-2 py-1 rounded text-xs font-bold ${
-                                        ep.method === 'GET' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
-                                            : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                    }`}>
-                                        {ep.method}
-                                    </span>
-                                            <h3 className="font-mono text-lg text-white font-medium break-all">{ep.path}</h3>
-                                        </div>
-
-                                        <p className="text-slate-400 mb-8 leading-relaxed">{ep.description}</p>
-
-                                        {/* TABLEAU PARAMETRES */}
-                                        {(ep.params || ep.body) && (
-                                            <div className="mb-8">
-                                                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">
-                                                    {ep.body ? 'Body Parameters' : 'Query Parameters'}
-                                                </h4>
-                                                <div className="border-t border-white/10">
-                                                    {[...(ep.params || []), ...(ep.body || [])].map((param, pIdx) => (
-                                                        <div key={pIdx} className="py-4 border-b border-white/10 grid grid-cols-12 gap-4">
-                                                            <div className="col-span-4 font-mono text-sm text-blue-300">
-                                                                {param.name}
-                                                                {param.required && <span className="ml-2 text-[10px] text-rose-500 font-bold uppercase">Required</span>}
-                                                            </div>
-                                                            <div className="col-span-8">
-                                                                <div className="text-xs text-slate-500 font-mono mb-1">{param.type}</div>
-                                                                <div className="text-sm text-slate-400">{param.desc}</div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* COLUMN 3 : CODE EXAMPLES (Sticky) */}
-                    <div className="hidden xl:block bg-[#0B1121] border-l border-white/5 sticky top-16 h-[calc(100vh-64px)] overflow-y-auto p-8 lg:p-12">
-                        <div className="space-y-20">
-                            {/* Un bloc vide pour l'intro */}
-                            <div className="h-32"></div>
-
-                            {Object.values(apiData).flat().map((ep, idx) => (
-                                <div key={idx} className="mb-32">
-                                    {/* Onglets Code */}
-                                    <div className="flex items-center gap-4 mb-4 border-b border-white/10 pb-2">
-                                        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest mr-auto">Exemple de requête</span>
-                                        <button className={`text-xs font-bold hover:text-white transition-colors ${activeTab === 'curl' ? 'text-white' : 'text-slate-600'}`} onClick={() => setActiveTab('curl')}>cURL</button>
-                                        <button className={`text-xs font-bold hover:text-white transition-colors ${activeTab === 'node' ? 'text-white' : 'text-slate-600'}`} onClick={() => setActiveTab('node')}>Node.js</button>
-                                    </div>
-
-                                    <div className="bg-[#020617] rounded-xl border border-white/10 p-4 mb-6 relative group/code">
-                                        <CopyButton text={`curl -X ${ep.method} https://api.ugate.io${ep.path}`} />
-                                        <pre className="font-mono text-xs text-blue-100 overflow-x-auto">
+                                <div className="bg-[#020617] rounded-xl border border-white/10 p-4 mb-6 relative group/code shadow-inner">
+                                    <CopyButton text={`curl -X ${ep.method} https://api.ugate.io${ep.path}`} />
+                                    <pre className="font-mono text-xs text-blue-100 overflow-x-auto">
                                     {activeTab === 'curl' && `curl -X ${ep.method} https://api.ugate.io/v1${ep.path} \\
   -H "Authorization: Bearer <token>"${ep.body ? ` \\
   -H "Content-Type: application/json" \\
   -d '${JSON.stringify(ep.responses[0].json, null, 2)}'` : ''}`}
-                                            {activeTab === 'node' && `const response = await fetch('https://api.ugate.io/v1${ep.path}', {
+                                        {activeTab === 'node' && `const response = await fetch('https://api.ugate.io/v1${ep.path}', {
   method: '${ep.method}',
   headers: { 'Authorization': 'Bearer <token>' }
 });`}
-                                </pre>
-                                    </div>
+                                    </pre>
+                                </div>
 
-                                    {/* Response Block */}
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Réponse</span>
-                                        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                                            <span className="text-[10px] font-mono text-emerald-400 font-bold">{ep.responses[0].code}</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="bg-[#020617] rounded-xl border border-white/10 p-4 relative group/code">
-                                        <CopyButton text={JSON.stringify(ep.responses[0].json, null, 2)} />
-                                        <pre className="font-mono text-xs text-emerald-100/80 overflow-x-auto">
-                                    {JSON.stringify(ep.responses[0].json, null, 2)}
-                                </pre>
+                                {/* Response Block */}
+                                <div className="flex items-center gap-2 mb-4">
+                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Réponse</span>
+                                    <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                                        <span className="text-[10px] font-mono text-emerald-400 font-bold">{ep.responses[0].code}</span>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
 
-                </main>
-            </div>
+                                <div className="bg-[#020617] rounded-xl border border-white/10 p-4 relative group/code shadow-inner">
+                                    <CopyButton text={JSON.stringify(ep.responses[0].json, null, 2)} />
+                                    <pre className="font-mono text-xs text-emerald-100/80 overflow-x-auto">
+                                    {JSON.stringify(ep.responses[0].json, null, 2)}
+                                    </pre>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+            </main>
         </div>
     );
 }
@@ -7492,6 +7454,567 @@ function CopyButton({ text }: { text: string }) {
         >
             {copied ? <Check size={14} className="text-emerald-400"/> : <Copy size={14}/>}
         </button>
+    )
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FICHIER: src\app\(public)\docs\page.tsx
+TYPE: .tsx
+TAILLE: 16.71 KB
+────────────────────────────────────────────────────────────────────────────────
+'use client';
+
+import { useState } from 'react';
+import { ShieldCheck, Server, Database, Lock, ChevronRight, Check, Copy } from 'lucide-react';
+import Link from 'next/link';
+
+
+function DocSidebar() {
+    const links = [
+        { title: "Introduction", id: "intro" },
+        { title: "Authentification", id: "auth" },
+        { title: "Check-In (Temps Réel)", id: "check" },
+        { title: "Jumeau Numérique", id: "details" },
+        { title: "Webhooks & Alertes", id: "webhooks" },
+        { title: "Feedback & Réputation", id: "feedback" },
+    ];
+
+    return (
+        <div className="hidden lg:block w-64 fixed left-0 top-20 bottom-0 border-r border-slate-200 dark:border-white/5 bg-white dark:bg-[#020617] overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800 transition-colors duration-300">
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Sommaire</h3>
+            <ul className="space-y-1">
+                {links.map((link) => (
+                    <li key={link.id}>
+                        <a
+                            href={`#${link.id}`}
+                            className="block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/5 rounded-lg transition-colors border-l-2 border-transparent hover:border-blue-500"
+                        >
+                            {link.title}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
+// --- COMPOSANT DIAGRAMME DE SÉQUENCE (ADAPTATIF) ---
+function SequenceDiagram({ title, steps }: { title: string, steps: { from: string, to: string, label: string, type?: 'req' | 'res' | 'async' }[] }) {
+    const POS: Record<string, number> = { 'App': 16.66, 'UGate': 50, 'DB': 83.33 };
+
+    return (
+        <div className="my-8 p-1 rounded-2xl bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-800 dark:to-slate-900 border border-slate-300 dark:border-white/10 shadow-xl transition-colors duration-300">
+            <div className="bg-slate-50 dark:bg-[#0B1121] rounded-xl p-8 overflow-x-auto scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700 transition-colors duration-300">
+                <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-8 text-center">{title}</div>
+
+                <div className="min-w-[600px] relative">
+                    {/* 1. GRILLE DE FOND */}
+                    <div className="absolute inset-0 flex pointer-events-none">
+                        {[1, 2, 3].map((_, i) => (
+                            <div key={i} className="w-1/3 flex justify-center">
+                                <div className="w-px h-full border-l border-dashed border-slate-300 dark:border-slate-700"></div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* 2. EN-TÊTES (ACTEURS) */}
+                    <div className="grid grid-cols-3 mb-10 relative z-10">
+                        <ActorIcon icon={<Server size={20}/>} label="Votre App" color="blue" />
+                        <ActorIcon icon={<ShieldCheck size={20}/>} label="UGate API" color="emerald" />
+                        <ActorIcon icon={<Database size={20}/>} label="Syndicats DB" color="slate" />
+                    </div>
+
+                    {/* 3. FLÈCHES (STEPS) */}
+                    <div className="space-y-10 pb-4 relative z-10">
+                        {steps.map((step, idx) => {
+                            const start = POS[step.from];
+                            const end = POS[step.to];
+                            const isLeftToRight = start < end;
+                            const leftPos = Math.min(start, end);
+                            const widthPercent = Math.abs(end - start);
+
+                            const colorClass = step.type === 'res' ? 'text-emerald-500 border-emerald-500/50' : step.type === 'async' ? 'text-amber-500 border-amber-500/50' : 'text-blue-500 border-blue-500/50';
+                            const borderStyle = step.type === 'res' ? 'border-dashed' : 'border-solid';
+                            const bgLabel = step.type === 'res' ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-500/20' : step.type === 'async' ? 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-500/20' : 'text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-500/20';
+
+                            return (
+                                <div key={idx} className="relative h-6 w-full">
+                                    <div
+                                        className={`absolute top-1/2 border-t ${colorClass} ${borderStyle}`}
+                                        style={{ left: `${leftPos}%`, width: `${widthPercent}%` }}
+                                    >
+                                        <div className={`absolute -top-2 ${isLeftToRight ? '-right-1.5' : '-left-1.5 rotate-180'} ${colorClass.split(' ')[0]}`}>
+                                            <ChevronRight size={16} fill="currentColor" />
+                                        </div>
+                                        <div className="absolute w-full text-center -top-6 flex justify-center">
+                                            <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${bgLabel}`}>
+                                                {step.label}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function ActorIcon({ icon, label, color }: {icon: any, label: string, color: string}) {
+    // Mapping des couleurs pour le mode clair/sombre
+    const colors: Record<string, string> = {
+        blue: "bg-blue-100 border-blue-300 text-blue-600 dark:bg-blue-600/20 dark:border-blue-500 dark:text-blue-400",
+        emerald: "bg-emerald-100 border-emerald-300 text-emerald-600 dark:bg-emerald-600/20 dark:border-emerald-500 dark:text-emerald-400",
+        slate: "bg-slate-100 border-slate-300 text-slate-600 dark:bg-slate-700/20 dark:border-slate-600 dark:text-slate-400"
+    };
+
+    return (
+        <div className="flex flex-col items-center gap-2">
+            <div className={`w-10 h-10 border rounded-lg flex items-center justify-center shadow-sm transition-colors duration-300 ${colors[color]}`}>
+                {icon}
+            </div>
+            <span className="text-sm font-bold text-slate-700 dark:text-white transition-colors">{label}</span>
+        </div>
+    );
+}
+
+// --- COMPOSANT CODE BLOCK ---
+function CodeBlock({ method, url, json }: { method: string, url: string, json: object }) {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(JSON.stringify(json, null, 2));
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    // Style du badge méthode
+    const methodBadge = method === 'GET' ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400'
+        : method === 'POST' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400'
+            : 'bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400';
+
+    return (
+        <div className="mt-4 rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0B1121] group shadow-sm dark:shadow-none transition-colors duration-300">
+            <div className="flex items-center justify-between px-4 py-3 bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/5">
+                <div className="flex items-center gap-3">
+                    <span className={`text-xs font-bold px-2 py-1 rounded transition-colors ${methodBadge}`}>
+                        {method}
+                    </span>
+                    <span className="font-mono text-xs text-slate-500 dark:text-slate-400 break-all">{url}</span>
+                </div>
+                <button onClick={handleCopy} className="text-slate-400 hover:text-blue-600 dark:text-slate-500 dark:hover:text-white transition-colors">
+                    {copied ? <Check size={14} /> : <Copy size={14} />}
+                </button>
+            </div>
+            <pre className="p-4 text-xs font-mono text-slate-600 dark:text-slate-300 overflow-x-auto leading-relaxed scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-white/10">
+                {JSON.stringify(json, null, 2)}
+            </pre>
+        </div>
+    )
+}
+
+// --- PAGE PRINCIPALE ---
+export default function DocsPage() {
+    return (
+        <div className="min-h-screen bg-slate-50 dark:bg-[#020617] text-slate-600 dark:text-slate-300 font-sans selection:bg-blue-500/30 transition-colors duration-300">
+            {/* Sidebar Fixe */}
+            <DocSidebar />
+
+            <main className="lg:ml-64 py-12 px-6 lg:px-20 max-w-5xl transition-colors duration-300">
+
+                {/* INTRO */}
+                <section id="intro" className="mb-20">
+                    <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6">Documentation API Compliance</h1>
+                    <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed mb-8">
+                        Intégrez la vérification syndicale dans vos applications de transport. Cette API fournit des données temps réel sur l'éligibilité des chauffeurs.
+                    </p>
+                    <div className="p-6 rounded-xl bg-blue-50 dark:bg-gradient-to-r dark:from-blue-900/20 dark:to-transparent border border-blue-200 dark:border-blue-500/20 flex gap-4 shadow-sm dark:shadow-none transition-colors">
+                        <div className="shrink-0"><ShieldCheck className="text-blue-600 dark:text-blue-400" /></div>
+                        <div>
+                            <h4 className="text-slate-900 dark:text-white font-bold mb-1">Environnement Sandbox</h4>
+                            <p className="text-sm text-slate-600 dark:text-slate-400">Pour les tests, utilisez l'ID chauffeur <code className="text-slate-700 bg-white border border-slate-200 px-1 rounded dark:text-white dark:bg-white/10 dark:border-transparent">driver-123</code> (Valide) ou <code className="text-slate-700 bg-white border border-slate-200 px-1 rounded dark:text-white dark:bg-white/10 dark:border-transparent">driver-456</code> (Rejeté).</p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* AUTH */}
+                <section id="auth" className="mb-20 border-t border-slate-200 dark:border-white/5 pt-12">
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-3">
+                        <Lock size={24} className="text-emerald-500 dark:text-emerald-400"/> Authentification
+                    </h2>
+                    <p className="text-slate-600 dark:text-slate-400 mb-6">
+                        Toutes les requêtes sécurisées nécessitent un jeton Bearer dans l'en-tête.
+                    </p>
+                    <CodeBlock
+                        method="HEADER"
+                        url="Authorization: Bearer <votre_token>"
+                        json={{ error: "Unauthorized", status: 401, message: "Token missing or expired" }}
+                    />
+                </section>
+
+                {/* ENDPOINT 1: CHECK */}
+                <section id="check" className="mb-24 border-t border-slate-200 dark:border-white/5 pt-12">
+                    <div className="flex items-center gap-3 mb-6">
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 font-bold rounded text-xs">GET</span>
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white break-all">/compliance/check/{`{driverId}`}</h2>
+                    </div>
+
+                    <p className="text-slate-600 dark:text-slate-400 mb-6">
+                        Vérifie l'éligibilité d'un chauffeur avant de lui attribuer une course. Cette route est optimisée pour une latence faible.
+                    </p>
+
+                    <SequenceDiagram
+                        title="Flow de Vérification (Check-In)"
+                        steps={[
+                            { from: 'App', to: 'UGate', label: 'GET /check/driver-123', type: 'req' },
+                            { from: 'UGate', to: 'DB', label: 'Redis Cache Lookup', type: 'req' },
+                            { from: 'UGate', to: 'UGate', label: 'Compliance Rules', type: 'async' },
+                            { from: 'UGate', to: 'App', label: '200 OK (AUTHORIZED)', type: 'res' }
+                        ]}
+                    />
+
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-8 mb-4">Réponse Type</h3>
+                    <CodeBlock
+                        method="200 OK"
+                        url="application/json"
+                        json={{
+                            syndicatDriverId: "synd-001",
+                            verificationTimestamp: "2025-12-27T10:00:00Z",
+                            globalStatus: "AUTHORIZED",
+                            details: {
+                                licenseValid: true,
+                                insuranceValid: true,
+                                membershipCurrent: true,
+                                medicalCheck: true
+                            },
+                            restrictions: []
+                        }}
+                    />
+                </section>
+
+                {/* (Le reste des sections utilise les mêmes composants CodeBlock et SequenceDiagram, donc elles s'adapteront automatiquement) */}
+                <section id="details" className="mb-24 border-t border-slate-200 dark:border-white/5 pt-12">
+                    <div className="flex items-center gap-3 mb-6">
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 font-bold rounded text-xs">GET</span>
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white break-all">/compliance/details/{`{driverId}`}</h2>
+                    </div>
+                    <p className="text-slate-600 dark:text-slate-400 mb-6">
+                        Récupère le profil officiel (Jumeau Numérique).
+                    </p>
+                    <CodeBlock method="200 OK" url="application/json" json={{ id: "driver-123", firstName: "Jean", isVerified: true }} />
+                </section>
+
+                <section id="webhooks" className="mb-24 border-t border-slate-200 dark:border-white/5 pt-12 relative">
+                    <div className="absolute -left-6 top-12 w-1 h-20 bg-amber-500 rounded-r"></div>
+                    <div className="flex items-center gap-3 mb-6">
+                        <span className="px-2 py-1 bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 font-bold rounded text-xs">WEBHOOK</span>
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white break-all">/syndicats/status-change</h2>
+                    </div>
+                    <p className="text-slate-600 dark:text-slate-400 mb-6">
+                        <strong>Critique :</strong> Notification de bannissement ou suspension.
+                    </p>
+                    <CodeBlock method="POST" url="Vers votre serveur" json={{ driverId: "driver-123", newStatus: "BANNED" }} />
+                </section>
+
+                <section id="feedback" className="mb-24 border-t border-slate-200 dark:border-white/5 pt-12">
+                    <div className="flex items-center gap-3 mb-6">
+                        <span className="px-2 py-1 bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 font-bold rounded text-xs">POST</span>
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white break-all">/compliance/feedback</h2>
+                    </div>
+                    <p className="text-slate-600 dark:text-slate-400 mb-6">
+                        Signalez un incident ou soumettez une note.
+                    </p>
+                    <CodeBlock method="POST" url="/compliance/feedback" json={{ driverId: "driver-123", rating: 5 }} />
+                </section>
+
+            </main>
+        </div>
+    );
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FICHIER: src\app\(public)\layout.tsx
+TYPE: .tsx
+TAILLE: 3.32 KB
+────────────────────────────────────────────────────────────────────────────────
+
+import Link from 'next/link';
+import { ShieldCheck } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
+
+export default function PublicLayout({ children }: { children: React.ReactNode }) {
+    return (
+        <div className="min-h-screen transition-colors duration-300">
+
+            <nav className="border-b border-slate-200 dark:border-white/5 bg-white/80 dark:bg-[#020617]/80 backdrop-blur-xl sticky top-0 z-50 transition-colors duration-300">
+                <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+                    <Link href="/" className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-blue-600/10 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-lg shadow-blue-500/5">
+                            <ShieldCheck size={20} />
+                        </div>
+                        <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white">
+                            UGate <span className="text-blue-600 dark:text-blue-500">Dev</span>
+                        </span>
+                    </Link>
+
+                    <div className="flex items-center gap-4 text-sm font-medium">
+
+                        <ThemeToggle />
+
+                        <div className="hidden md:flex items-center gap-6 ml-2 pl-6 border-l border-slate-200 dark:border-white/10">
+                            <Link href="/docs" className="text-slate-600 hover:text-blue-600 dark:text-slate-400 dark:hover:text-white transition-colors">Documentation</Link>
+                            <Link href="/api-ref" className="text-slate-600 hover:text-blue-600 dark:text-slate-400 dark:hover:text-white transition-colors">API Ref</Link>
+                            <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 bg-emerald-100/50 dark:bg-emerald-400/10 px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-400/20 text-xs font-bold uppercase tracking-wider">
+                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></div>
+                                System Operational
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            {children}
+
+
+            <footer className="border-t border-slate-200 dark:border-white/5 bg-white dark:bg-[#020617] transition-colors duration-300">
+                <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="flex items-center gap-2 opacity-50 text-slate-900 dark:text-white">
+                        <ShieldCheck size={16} />
+                        <span className="text-sm font-semibold">YowYob UGate © 2026</span>
+                    </div>
+                    <div className="flex gap-6 text-sm text-slate-500">
+                        <a href="#" className="hover:text-blue-600 dark:hover:text-white">Privacy</a>
+                        <a href="#" className="hover:text-blue-600 dark:hover:text-white">Terms</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    );
+}
+
+
+
+
+────────────────────────────────────────────────────────────────────────────────
+FICHIER: src\app\(public)\page.tsx
+TYPE: .tsx
+TAILLE: 15.06 KB
+────────────────────────────────────────────────────────────────────────────────
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Copy, Check, ArrowRight, Zap, Code2, Globe, LayoutTemplate, Link as LinkIcon, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+
+export default function DeveloperPortal() {
+    const [driverId, setDriverId] = useState('');
+    const [redirectUrl, setRedirectUrl] = useState('https://ride-and-go.app/callback');
+    const [copied, setCopied] = useState(false);
+    const [exportFormat, setExportFormat] = useState<'code' | 'url'>('code');
+    const [baseUrl, setBaseUrl] = useState('http://localhost:3000');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setBaseUrl(window.location.origin);
+        }
+    }, []);
+
+    const generatedLink = `${baseUrl}/connect?driverId=${driverId || '{UUID}'}&redirectUrl=${encodeURIComponent(redirectUrl)}`;
+
+    const codeString = `const verificationLink = \`
+  ${baseUrl}/connect?
+  driverId=\${driverId}&
+  redirectUrl=\${callback}
+\`;`;
+
+    const handleCopy = () => {
+        const textToCopy = exportFormat === 'code' ? codeString : generatedLink;
+        navigator.clipboard.writeText(textToCopy);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    const fillMock = (id: string) => setDriverId(id);
+
+    return (
+        <main className="max-w-6xl mx-auto px-6 py-24 relative z-10">
+
+            {/* --- BACKGROUND FX (Gestion des couleurs CLAIR vs SOMBRE) --- */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10 transition-colors duration-500">
+                {/* Mode Clair : Fond blanc vers gris // Mode Sombre : Fond bleu nuit vers noir */}
+                <div className="absolute inset-0 bg-gradient-to-b from-white via-slate-50 to-slate-100 dark:from-[#0f172a] dark:via-[#020617] dark:to-black"></div>
+
+                {/* Grille : Grise en clair, Blanche en sombre (opacité réduite) */}
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+
+                {/* Orbe : Bleu ciel en clair, Bleu profond en sombre */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-blue-400/20 dark:bg-blue-600/20 rounded-full blur-[120px] opacity-60 dark:opacity-40"></div>
+            </div>
+
+            {/* --- HERO SECTION --- */}
+            <div className="text-center mb-20">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 dark:bg-blue-950/30 dark:border-blue-800/30 dark:text-blue-300 text-xs font-bold uppercase tracking-widest mb-8 shadow-sm dark:shadow-none"
+                >
+                    <Zap size={12} className="text-blue-600 dark:text-blue-400" />
+                    Compliance as a Service
+                </motion.div>
+
+                <motion.h1
+                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
+                    className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white mb-6 leading-tight"
+                >
+                    Intégrez la conformité <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 dark:from-blue-400 dark:via-blue-500 dark:to-blue-400">
+                        en moins de 30 secondes.
+                    </span>
+                </motion.h1>
+
+                <motion.p
+                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
+                    className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed font-light"
+                >
+                    Ne codez plus la logique syndicale. Générez un lien sécurisé UGate, redirigez vos chauffeurs, et recevez un statut certifié instantanément.
+                </motion.p>
+            </div>
+
+            {/* --- LE GÉNÉRATEUR (THE PLAYGROUND) --- */}
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.3 }}
+                className="relative"
+            >
+                {/* Glow Effect */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-indigo-400 dark:from-blue-600 dark:to-indigo-600 rounded-[34px] blur opacity-30 dark:opacity-20 transition-all duration-300"></div>
+
+                {/* Conteneur Principal : Blanc (Light) vs Bleu Nuit (Dark) */}
+                <div className="bg-white dark:bg-[#0B1121] rounded-[32px] border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden relative transition-colors duration-300">
+
+                    {/* Window Header */}
+                    <div className="h-12 bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/5 flex items-center px-6 gap-2 transition-colors">
+                        <div className="w-3 h-3 rounded-full bg-rose-400 border border-rose-500/30"></div>
+                        <div className="w-3 h-3 rounded-full bg-amber-400 border border-amber-500/30"></div>
+                        <div className="w-3 h-3 rounded-full bg-emerald-400 border border-emerald-500/30"></div>
+                        <div className="ml-4 text-xs font-mono text-slate-400 dark:text-slate-500 flex items-center gap-2">
+                            <Code2 size={12} />
+                            integration_builder
+                        </div>
+                    </div>
+
+                    <div className="p-8 md:p-12 grid lg:grid-cols-2 gap-12">
+                        {/* GAUCHE : INPUTS */}
+                        <div className="space-y-8">
+                            <div>
+                                <div className="flex justify-between items-baseline mb-3">
+                                    <label className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wide transition-colors">
+                                        1. ID du Chauffeur
+                                    </label>
+                                    <div className="flex gap-2 text-[10px] font-mono">
+                                        <button onClick={() => fillMock('driver-123')} className="px-2 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 rounded hover:bg-emerald-100 transition-colors">Mock: Valide</button>
+                                        <button onClick={() => fillMock('driver-456')} className="px-2 py-1 bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20 rounded hover:bg-rose-100 transition-colors">Mock: Invalide</button>
+                                    </div>
+                                </div>
+                                <input
+                                    type="text"
+                                    className="w-full bg-slate-50 dark:bg-[#020617] border border-slate-200 dark:border-white/10 rounded-xl p-4 text-slate-900 dark:text-white font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                                    placeholder="ex: driver-123"
+                                    value={driverId}
+                                    onChange={(e) => setDriverId(e.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wide mb-3 transition-colors">
+                                    2. URL de retour (Callback)
+                                </label>
+                                <input
+                                    type="text"
+                                    className="w-full bg-slate-50 dark:bg-[#020617] border border-slate-200 dark:border-white/10 rounded-xl p-4 text-slate-900 dark:text-white font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                                    value={redirectUrl}
+                                    onChange={(e) => setRedirectUrl(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="pt-4">
+                                <Link
+                                    href={`/connect?driverId=${driverId || 'driver-123'}&redirectUrl=${encodeURIComponent(redirectUrl)}`}
+                                    className="group w-full inline-flex items-center justify-center gap-3 px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-xl shadow-blue-500/20 dark:shadow-blue-900/20"
+                                >
+                                    Simuler l'expérience Utilisateur
+                                    <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* DROITE : CODE */}
+                        <div className="relative flex flex-col h-full">
+                            <div className="flex justify-between items-end mb-3">
+                                <label className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wide transition-colors">
+                                    3. Intégration
+                                </label>
+                                <div className="bg-slate-100 dark:bg-white/5 rounded-lg p-1 flex gap-1 border border-slate-200 dark:border-white/5 transition-colors">
+                                    <button onClick={() => setExportFormat('code')} className={`px-3 py-1 text-[10px] font-bold uppercase rounded-md transition-all flex items-center gap-1.5 ${exportFormat === 'code' ? 'bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}> <Code2 size={12}/> Code </button>
+                                    <button onClick={() => setExportFormat('url')} className={`px-3 py-1 text-[10px] font-bold uppercase rounded-md transition-all flex items-center gap-1.5 ${exportFormat === 'url' ? 'bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}> <LinkIcon size={12}/> URL </button>
+                                </div>
+                            </div>
+
+                            {/* Zone Code : Toujours Sombre pour la lisibilité Syntaxique */}
+                            <div className="group relative bg-[#0f172a] border border-slate-200 dark:border-white/10 rounded-xl overflow-hidden flex-1 min-h-[220px] flex flex-col shadow-inner transition-colors">
+                                <div className="flex-1 p-6 overflow-x-auto scrollbar-hide">
+                                    {exportFormat === 'code' ? (
+                                        <div className="font-mono text-xs md:text-sm text-blue-100">
+                                            <span className="text-purple-400">const</span> <span className="text-blue-400">verificationLink</span> = <span className="text-green-400">`</span><br/>
+                                            &nbsp;&nbsp;{baseUrl}/connect?<br/>
+                                            &nbsp;&nbsp;driverId=<span className="text-yellow-400">${`{driverId}`}</span>&<br/>
+                                            &nbsp;&nbsp;redirectUrl=<span className="text-yellow-400">${`{callback}`}</span><br/>
+                                            <span className="text-green-400">`</span>;
+                                        </div>
+                                    ) : (
+                                        <div className="font-mono text-xs md:text-sm text-slate-300 break-all">
+                                            {generatedLink}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="border-t border-white/5 bg-white/[0.02] p-2 flex justify-between items-center">
+                                    <span className="text-[10px] text-slate-500 px-3">
+                                        {exportFormat === 'code' ? 'TypeScript / JS Template' : 'HTTPS Standard Link'}
+                                    </span>
+                                    <button onClick={handleCopy} className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-white text-xs font-bold rounded-lg transition-colors border border-white/5">
+                                        {copied ? <Check size={14} className="text-emerald-400"/> : <Copy size={14}/>}
+                                        {copied ? 'Copié !' : 'Copier'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+
+
+            <div className="mt-24 grid md:grid-cols-3 gap-8">
+                <FeatureTile icon={<Globe className="text-blue-500 dark:text-blue-400" />} title="Hébergé & Sécurisé" desc="Infrastructure gérée par UGate. Certificats SSL et chiffrement bancaire inclus par défaut." />
+                <FeatureTile icon={<Zap className="text-amber-500 dark:text-amber-400" />} title="Synchronisation Live" desc="Changements de statut (assurance, bannissement) répercutés en temps réel sur l'API." />
+                <FeatureTile icon={<LayoutTemplate className="text-purple-500 dark:text-purple-400" />} title="Marque Blanche" desc="L'interface s'adapte à votre identité visuelle pour une expérience utilisateur fluide." />
+            </div>
+        </main>
+    );
+}
+
+
+function FeatureTile({ icon, title, desc }: any) {
+    return (
+        <div className="p-6 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 hover:border-blue-300 dark:hover:bg-white/10 transition-colors group shadow-sm dark:shadow-none">
+            <div className="w-12 h-12 bg-slate-50 dark:bg-white/5 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform border border-slate-100 dark:border-transparent">
+                {icon}
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 transition-colors">{title}</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">{desc}</p>
+        </div>
     )
 }
 
@@ -7701,437 +8224,71 @@ function ErrorState({ message }: { message: string }) {
 
 
 ────────────────────────────────────────────────────────────────────────────────
-FICHIER: src\app\docs\page.tsx
-TYPE: .tsx
-TAILLE: 18.92 KB
-────────────────────────────────────────────────────────────────────────────────
-'use client';
-
-import { useState } from 'react';
-import { ShieldCheck, Server, Database, Lock, ChevronRight, Check, Copy, BellRing, ArrowLeftRight } from 'lucide-react';
-import Link from 'next/link';
-
-// --- COMPOSANT DE NAVIGATION (SIDEBAR) ---
-function DocSidebar() {
-    const links = [
-        { title: "Introduction", id: "intro" },
-        { title: "Authentification", id: "auth" },
-        { title: "Check-In (Temps Réel)", id: "check" },
-        { title: "Jumeau Numérique", id: "details" },
-        { title: "Webhooks & Alertes", id: "webhooks" }, // Ajouté
-        { title: "Feedback & Réputation", id: "feedback" },
-    ];
-
-    return (
-        <div className="hidden lg:block w-64 fixed left-0 top-20 bottom-0 border-r border-white/5 bg-[#020617] overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-slate-800">
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Sommaire</h3>
-            <ul className="space-y-1">
-                {links.map((link) => (
-                    <li key={link.id}>
-                        <a
-                            href={`#${link.id}`}
-                            className="block px-4 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors border-l-2 border-transparent hover:border-blue-500"
-                        >
-                            {link.title}
-                        </a>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-}
-
-// --- COMPOSANT DIAGRAMME DE SÉQUENCE (CORRIGÉ & ALIGNÉ) ---
-// --- COMPOSANT DIAGRAMME DE SÉQUENCE (ROBUSTE & GRID) ---
-function SequenceDiagram({ title, steps }: { title: string, steps: { from: string, to: string, label: string, type?: 'req' | 'res' | 'async' }[] }) {
-    // Configuration des positions (En pourcentage du conteneur)
-    // On divise l'espace en 6 segments. Les acteurs sont à 1/6, 3/6 (1/2), et 5/6.
-    const POS: Record<string, number> = { 'App': 16.66, 'UGate': 50, 'DB': 83.33 };
-
-    return (
-        <div className="my-8 p-1 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 shadow-2xl">
-            <div className="bg-[#0B1121] rounded-xl p-8 overflow-x-auto scrollbar-thin scrollbar-thumb-slate-700">
-                <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-8 text-center">{title}</div>
-
-                {/* CONTENEUR À LARGEUR FIXE MINIMALE (Empêche l'écrasement) */}
-                <div className="min-w-[600px] relative">
-
-                    {/* 1. GRILLE DE FOND (Lignes Verticales) */}
-                    <div className="absolute inset-0 flex pointer-events-none">
-                        {/* Colonne 1 (App) */}
-                        <div className="w-1/3 flex justify-center">
-                            <div className="w-px h-full border-l border-dashed border-slate-700"></div>
-                        </div>
-                        {/* Colonne 2 (UGate) */}
-                        <div className="w-1/3 flex justify-center">
-                            <div className="w-px h-full border-l border-dashed border-slate-700"></div>
-                        </div>
-                        {/* Colonne 3 (DB) */}
-                        <div className="w-1/3 flex justify-center">
-                            <div className="w-px h-full border-l border-dashed border-slate-700"></div>
-                        </div>
-                    </div>
-
-                    {/* 2. EN-TÊTES (ACTEURS) - Utilisation de Grid pour l'alignement parfait */}
-                    <div className="grid grid-cols-3 mb-10 relative z-10">
-                        {/* Actor 1: App */}
-                        <div className="flex flex-col items-center gap-2">
-                            <div className="w-10 h-10 bg-blue-600/20 border border-blue-500 rounded-lg flex items-center justify-center text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-                                <Server size={20}/>
-                            </div>
-                            <span className="text-sm font-bold text-white">Votre App</span>
-                        </div>
-                        {/* Actor 2: UGate */}
-                        <div className="flex flex-col items-center gap-2">
-                            <div className="w-10 h-10 bg-emerald-600/20 border border-emerald-500 rounded-lg flex items-center justify-center text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                                <ShieldCheck size={20}/>
-                            </div>
-                            <span className="text-sm font-bold text-white">UGate API</span>
-                        </div>
-                        {/* Actor 3: DB */}
-                        <div className="flex flex-col items-center gap-2">
-                            <div className="w-10 h-10 bg-slate-700/20 border border-slate-600 rounded-lg flex items-center justify-center text-slate-400">
-                                <Database size={20}/>
-                            </div>
-                            <span className="text-sm font-bold text-white">Syndicats DB</span>
-                        </div>
-                    </div>
-
-                    {/* 3. FLÈCHES (STEPS) */}
-                    <div className="space-y-10 pb-4 relative z-10">
-                        {steps.map((step, idx) => {
-                            const start = POS[step.from];
-                            const end = POS[step.to];
-
-                            // Calculs de positionnement
-                            const isLeftToRight = start < end;
-                            const leftPos = Math.min(start, end);
-                            const widthPercent = Math.abs(end - start);
-
-                            // Styles dynamiques
-                            const colorClass = step.type === 'res' ? 'text-emerald-500 border-emerald-500/50' : step.type === 'async' ? 'text-amber-500 border-amber-500/50' : 'text-blue-500 border-blue-500/50';
-                            const borderStyle = step.type === 'res' ? 'border-dashed' : 'border-solid';
-                            const bgLabel = step.type === 'res' ? 'text-emerald-400' : step.type === 'async' ? 'text-amber-400' : 'text-blue-300';
-
-                            return (
-                                <div key={idx} className="relative h-6 w-full">
-                                    <div
-                                        className={`absolute top-1/2 border-t ${colorClass} ${borderStyle}`}
-                                        style={{
-                                            left: `${leftPos}%`,
-                                            width: `${widthPercent}%`
-                                        }}
-                                    >
-                                        {/* Pointe de flèche */}
-                                        <div className={`absolute -top-2 ${isLeftToRight ? '-right-1.5' : '-left-1.5 rotate-180'} ${colorClass.split(' ')[0]}`}>
-                                            <ChevronRight size={16} fill="currentColor" />
-                                        </div>
-
-                                        {/* Label au dessus */}
-                                        <div className="absolute w-full text-center -top-6 flex justify-center">
-                                            <span className={`text-[10px] font-mono px-2 py-0.5 rounded border border-white/5 bg-[#0B1121] ${bgLabel}`}>
-                                                {step.label}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-}
-
-// --- COMPOSANT CODE BLOCK ---
-function CodeBlock({ method, url, json }: { method: string, url: string, json: object }) {
-    const [copied, setCopied] = useState(false);
-
-    const handleCopy = () => {
-        navigator.clipboard.writeText(JSON.stringify(json, null, 2));
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
-
-    return (
-        <div className="mt-4 rounded-xl overflow-hidden border border-white/10 bg-[#0B1121] group">
-            <div className="flex items-center justify-between px-4 py-3 bg-white/5 border-b border-white/5">
-                <div className="flex items-center gap-3">
-                    <span className={`text-xs font-bold px-2 py-1 rounded ${method === 'GET' ? 'bg-blue-500/20 text-blue-400' : method === 'POST' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}`}>
-                        {method}
-                    </span>
-                    <span className="font-mono text-xs text-slate-400 break-all">{url}</span>
-                </div>
-                <button onClick={handleCopy} className="text-slate-500 hover:text-white transition-colors">
-                    {copied ? <Check size={14} /> : <Copy size={14} />}
-                </button>
-            </div>
-            <pre className="p-4 text-xs font-mono text-slate-300 overflow-x-auto leading-relaxed scrollbar-thin scrollbar-thumb-white/10">
-                {JSON.stringify(json, null, 2)}
-            </pre>
-        </div>
-    )
-}
-
-// --- PAGE PRINCIPALE ---
-export default function DocsPage() {
-    return (
-        <div className="min-h-screen bg-[#020617] text-slate-300 font-sans selection:bg-blue-500/30">
-
-            {/* NAVBAR FIXE */}
-            <nav className="fixed top-0 left-0 right-0 h-20 bg-[#020617]/90 backdrop-blur-xl border-b border-white/5 z-50 flex items-center px-6 lg:px-12 justify-between">
-                <Link href="/" className="flex items-center gap-3 group">
-                    <div className="w-8 h-8 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
-                        <ShieldCheck size={18} />
-                    </div>
-                    <span className="font-bold text-white tracking-tight">UGate <span className="text-slate-600">Docs</span></span>
-                </Link>
-                <Link href="/" className="text-sm font-medium text-slate-400 hover:text-white transition-colors bg-white/5 px-4 py-2 rounded-full border border-white/5 hover:bg-white/10">
-                    Retour au portail
-                </Link>
-            </nav>
-
-            <DocSidebar />
-
-            <main className="lg:ml-64 pt-32 pb-24 px-6 lg:px-20 max-w-5xl">
-
-                {/* INTRO */}
-                <section id="intro" className="mb-20">
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">Documentation API Compliance</h1>
-                    <p className="text-lg text-slate-400 leading-relaxed mb-8">
-                        Intégrez la vérification syndicale dans vos applications de transport. Cette API fournit des données temps réel sur l'éligibilité des chauffeurs.
-                    </p>
-                    <div className="p-6 rounded-xl bg-gradient-to-r from-blue-900/20 to-transparent border border-blue-500/20 flex gap-4">
-                        <div className="shrink-0"><ShieldCheck className="text-blue-400" /></div>
-                        <div>
-                            <h4 className="text-white font-bold mb-1">Environnement Sandbox</h4>
-                            <p className="text-sm text-slate-400">Pour les tests, utilisez l'ID chauffeur <code className="text-white bg-white/10 px-1 rounded">driver-123</code> (Valide) ou <code className="text-white bg-white/10 px-1 rounded">driver-456</code> (Rejeté).</p>
-                        </div>
-                    </div>
-                </section>
-
-                {/* AUTH */}
-                <section id="auth" className="mb-20 border-t border-white/5 pt-12">
-                    <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                        <Lock size={24} className="text-emerald-400"/> Authentification
-                    </h2>
-                    <p className="text-slate-400 mb-6">
-                        Toutes les requêtes sécurisées nécessitent un jeton Bearer dans l'en-tête.
-                    </p>
-                    <CodeBlock
-                        method="HEADER"
-                        url="Authorization: Bearer <votre_token>"
-                        json={{ error: "Unauthorized", status: 401, message: "Token missing or expired" }}
-                    />
-                </section>
-
-                {/* ENDPOINT 1: CHECK */}
-                <section id="check" className="mb-24 border-t border-white/5 pt-12">
-                    <div className="flex items-center gap-3 mb-6">
-                        <span className="px-2 py-1 bg-blue-500/20 text-blue-400 font-bold rounded text-xs">GET</span>
-                        <h2 className="text-2xl font-bold text-white break-all">/compliance/check/{`{driverId}`}</h2>
-                    </div>
-
-                    <p className="text-slate-400 mb-6">
-                        Vérifie l'éligibilité d'un chauffeur avant de lui attribuer une course. Cette route est optimisée pour une latence faible.
-                    </p>
-
-                    <SequenceDiagram
-                        title="Flow de Vérification (Check-In)"
-                        steps={[
-                            { from: 'App', to: 'UGate', label: 'GET /check/driver-123', type: 'req' },
-                            { from: 'UGate', to: 'DB', label: 'Redis Cache Lookup', type: 'req' },
-                            { from: 'UGate', to: 'UGate', label: 'Compliance Rules', type: 'async' },
-                            { from: 'UGate', to: 'App', label: '200 OK (AUTHORIZED)', type: 'res' }
-                        ]}
-                    />
-
-                    <h3 className="text-lg font-bold text-white mt-8 mb-4">Réponse Type</h3>
-                    <CodeBlock
-                        method="200 OK"
-                        url="application/json"
-                        json={{
-                            syndicatDriverId: "synd-001",
-                            verificationTimestamp: "2025-12-27T10:00:00Z",
-                            globalStatus: "AUTHORIZED",
-                            details: {
-                                licenseValid: true,
-                                insuranceValid: true,
-                                membershipCurrent: true,
-                                medicalCheck: true
-                            },
-                            restrictions: []
-                        }}
-                    />
-                </section>
-
-
-                {/* ENDPOINT 2: DETAILS */}
-                <section id="details" className="mb-24 border-t border-white/5 pt-12">
-                    <div className="flex items-center gap-3 mb-6">
-                        <span className="px-2 py-1 bg-blue-500/20 text-blue-400 font-bold rounded text-xs">GET</span>
-                        <h2 className="text-2xl font-bold text-white break-all">/compliance/details/{`{driverId}`}</h2>
-                    </div>
-
-                    <p className="text-slate-400 mb-6">
-                        Récupère le profil officiel (Jumeau Numérique) pour affichage dans votre application. Les URLs des documents sont signées et temporaires.
-                    </p>
-
-                    <CodeBlock
-                        method="200 OK"
-                        url="application/json"
-                        json={{
-                            id: "driver-123",
-                            firstName: "Jean",
-                            lastName: "EKTO",
-                            photoUrl: "https://cdn.ugate.io/...",
-                            cniNumber: "11223344",
-                            isVerified: true
-                        }}
-                    />
-                </section>
-
-                {/* ENDPOINT 3: WEBHOOKS (NEW) */}
-                <section id="webhooks" className="mb-24 border-t border-white/5 pt-12 relative">
-                    <div className="absolute -left-6 top-12 w-1 h-20 bg-amber-500 rounded-r"></div>
-                    <div className="flex items-center gap-3 mb-6">
-                        <span className="px-2 py-1 bg-amber-500/20 text-amber-400 font-bold rounded text-xs">WEBHOOK</span>
-                        <h2 className="text-2xl font-bold text-white break-all">/syndicats/status-change</h2>
-                    </div>
-
-                    <p className="text-slate-400 mb-6">
-                        <strong>Critique :</strong> Configurez ce webhook pour être notifié si un chauffeur est <strong>banni</strong> ou suspendu par son syndicat alors qu'il est en service.
-                    </p>
-
-                    <SequenceDiagram
-                        title="Notification de Bannissement (Push)"
-                        steps={[
-                            { from: 'DB', to: 'UGate', label: 'Admin Banni Chauffeur', type: 'async' },
-                            { from: 'UGate', to: 'App', label: 'POST /your-webhook', type: 'req' },
-                            { from: 'App', to: 'UGate', label: '200 OK (Ack)', type: 'res' }
-                        ]}
-                    />
-
-                    <CodeBlock
-                        method="POST"
-                        url="Vers votre serveur"
-                        json={{
-                            driverId: "driver-123",
-                            newStatus: "BANNED",
-                            reason: "Fraude détectée sur assurance",
-                            timestamp: "2025-12-27T14:00:00Z"
-                        }}
-                    />
-                </section>
-
-                {/* ENDPOINT 4: FEEDBACK */}
-                <section id="feedback" className="mb-24 border-t border-white/5 pt-12">
-                    <div className="flex items-center gap-3 mb-6">
-                        <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 font-bold rounded text-xs">POST</span>
-                        <h2 className="text-2xl font-bold text-white break-all">/compliance/feedback</h2>
-                    </div>
-
-                    <p className="text-slate-400 mb-6">
-                        Signalez un incident ou soumettez une note. UGate met à jour le score de réputation du chauffeur.
-                    </p>
-
-                    <SequenceDiagram
-                        title="Soumission d'avis"
-                        steps={[
-                            { from: 'App', to: 'UGate', label: 'POST /feedback', type: 'req' },
-                            { from: 'UGate', to: 'App', label: '202 Accepted', type: 'res' },
-                            { from: 'UGate', to: 'DB', label: 'Async Processing', type: 'async' }
-                        ]}
-                    />
-                </section>
-
-            </main>
-        </div>
-    );
-}
-
-
-────────────────────────────────────────────────────────────────────────────────
 FICHIER: src\app\globals.css
 TYPE: .css
-TAILLE: 1.79 KB
+TAILLE: 1.49 KB
 ────────────────────────────────────────────────────────────────────────────────
 @import "tailwindcss";
 
-/*
-  Configuration du Thème (Tailwind v4)
-  Ici on définit nos couleurs personnalisées directement via des variables CSS.
-  Tailwind va automatiquement créer les classes utilitaires correspondantes
-  (ex: bg-ugate-600, text-ugate-900, border-success, etc.)
-*/
+/* 🚨 LIGNE CRUCIALE POUR TAILWIND V4 + NEXT-THEMES */
+/* Elle dit à Tailwind : "Active le mode dark quand la classe .dark est présente sur le HTML" */
+@custom-variant dark (&:where(.dark, .dark *));
+@tailwind components;
+@tailwind utilities;
+
 
 @theme {
-    /* --- PALETTE UGATE (Dominante Bleue) --- */
-
-    /* Fond très léger, presque blanc (pour les cartes et zones secondaires) */
+    /* Tes couleurs UGate */
     --color-ugate-50: #eff6ff;
-
-    /* Bleu très clair (pour les bordures subtiles ou les hovers) */
     --color-ugate-100: #dbeafe;
-
-    /* Bleu Standard (Icônes, liens secondaires) */
     --color-ugate-500: #3b82f6;
-
-    /* Bleu Primaire (BOUTONS D'ACTION, CTA) -> Le cœur de ton 40% */
     --color-ugate-600: #2563eb;
-
-    /* Bleu Profond (Texte fort, Titres secondaires) */
     --color-ugate-800: #1e40af;
-
-    /* Bleu Nuit (Contrastes forts, En-têtes, Footer) */
     --color-ugate-900: #1e3a8a;
-
-
-    /* --- PALETTE ÉTATS (Feedback UX) --- */
-
-    /* Vert émeraude : Succès / Validé */
     --color-success: #10b981;
-
-    /* Rouge soft : Erreur / Bloquant */
     --color-error: #ef4444;
 }
 
-/*
-  Styles de base globaux
-  On applique ici la règle du 60% Blanc pour le fond général
-*/
 @layer base {
+    /*
+       DÉFINITION DES COULEURS PAR DÉFAUT
+       Light Mode est le défaut. Dark Mode écrase les valeurs.
+    */
     body {
-        /* Le fond par défaut est un gris très très clair (presque blanc) pour éviter la fatigue visuelle du #FFFFFF pur */
-        background-color: #f8fafc;
-        color: #1e293b; /* Gris foncé pour le texte (plus lisible que le noir pur) */
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        @apply bg-slate-50 text-slate-900; /* Mode Clair par défaut */
+        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
+    }
+
+    /* Quand la classe .dark est active sur le body (via next-themes) */
+    .dark body {
+        @apply bg-[#020617] text-slate-300; /* Mode Sombre activé */
     }
 }
 
-/*
-  Utilitaires personnalisés (Optionnel)
-  Pour l'effet "Glassmorphism" moderne
-*/
 @utility glass {
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
+@layer base {
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    }
+}
+
 
 ────────────────────────────────────────────────────────────────────────────────
 FICHIER: src\app\layout.tsx
 TYPE: .tsx
-TAILLE: 492 B
+TAILLE: 693 B
 ────────────────────────────────────────────────────────────────────────────────
-// src/app/layout.tsx
 import "./globals.css";
-import { Inter } from "next/font/google"; // ou Geist
-
-const inter = Inter({ subsets: ["latin"] });
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export default function RootLayout({
                                        children,
@@ -8139,9 +8296,16 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="fr">
-        <body className={`${inter.className} antialiased bg-gray-50 text-slate-900`}>
-        {children}
+        <html lang="fr" suppressHydrationWarning>
+        <body className="antialiased bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-slate-300 transition-colors duration-300">
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
+            {children}
+        </ThemeProvider>
         </body>
         </html>
     );
@@ -8149,306 +8313,15 @@ export default function RootLayout({
 
 
 ────────────────────────────────────────────────────────────────────────────────
-FICHIER: src\app\page.tsx
-TYPE: .tsx
-TAILLE: 17.52 KB
-────────────────────────────────────────────────────────────────────────────────
-'use client';
-
-import { useState } from 'react';
-import { Copy, Check, Terminal, ArrowRight, ShieldCheck, Zap, Code2, Globe, LayoutTemplate, Link as LinkIcon } from 'lucide-react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-
-export default function DeveloperPortal() {
-    const [driverId, setDriverId] = useState('');
-    const [redirectUrl, setRedirectUrl] = useState('https://ride-and-go.app/callback');
-    const [copied, setCopied] = useState(false);
-
-    // NOUVEAU : État pour gérer le format d'affichage (Code ou URL)
-    const [exportFormat, setExportFormat] = useState<'code' | 'url'>('code');
-
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
-    const generatedLink = `${baseUrl}/connect?driverId=${driverId || '{UUID}'}&redirectUrl=${encodeURIComponent(redirectUrl)}`;
-
-    // Contenu textuel à copier selon le format choisi
-    const codeString = `const verificationLink = \`
-  ${baseUrl}/connect?
-  driverId=\${driverId}&
-  redirectUrl=\${callback}
-\`;`;
-
-    const handleCopy = () => {
-        // On copie soit le code JS, soit l'URL brute selon l'onglet actif
-        const textToCopy = exportFormat === 'code' ? codeString : generatedLink;
-        navigator.clipboard.writeText(textToCopy);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
-
-    const fillMock = (id: string) => setDriverId(id);
-
-    return (
-        <div className="min-h-screen bg-[#020617] text-slate-300 font-sans selection:bg-blue-500/30 selection:text-blue-200">
-
-            {/* --- BACKGROUND FX --- */}
-            <div className="fixed inset-0 pointer-events-none">
-                <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"></div>
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-blue-600/20 rounded-full blur-[120px] opacity-40"></div>
-            </div>
-
-            {/* --- NAVBAR --- */}
-            <nav className="border-b border-white/5 bg-[#020617]/50 backdrop-blur-xl sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 shadow-lg shadow-blue-500/5">
-                            <ShieldCheck size={20} />
-                        </div>
-                        <span className="font-bold text-xl tracking-tight text-white">UGate <span className="text-blue-500">Dev</span></span>
-                    </div>
-
-                    <div className="flex items-center gap-6 text-sm font-medium">
-                        <a href="/docs" className="hover:text-white transition-colors">Documentation</a>
-                        <a href="api-ref" className="hover:text-white transition-colors">API Reference</a>
-                        <div className="h-4 w-px bg-white/10"></div>
-                        <div className="flex items-center gap-2 text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full border border-emerald-400/20 text-xs font-bold uppercase tracking-wider">
-                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
-                            System Operational
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
-            <main className="max-w-6xl mx-auto px-6 py-24 relative z-10">
-
-                {/* --- HERO SECTION --- */}
-                <div className="text-center mb-20">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-950/30 border border-blue-800/30 text-blue-300 text-xs font-bold uppercase tracking-widest mb-8"
-                    >
-                        <Zap size={12} className="text-blue-400" />
-                        Compliance as a Service
-                    </motion.div>
-
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-tight"
-                    >
-                        Intégrez la conformité <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-600 to-blue-600">
-              en moins de 30 secondes.
-            </span>
-                    </motion.h1>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed font-light"
-                    >
-                        Ne codez plus la logique syndicale. Générez un lien sécurisé UGate, redirigez vos chauffeurs, et recevez un statut certifié instantanément.
-                    </motion.p>
-                </div>
-
-                {/* --- LE GÉNÉRATEUR (THE PLAYGROUND) --- */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.3 }}
-                    className="relative"
-                >
-                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[34px] blur opacity-20"></div>
-
-                    <div className="bg-[#0B1121] rounded-[32px] border border-white/10 shadow-2xl overflow-hidden relative">
-
-                        {/* Header façon fenêtre */}
-                        <div className="h-12 bg-white/5 border-b border-white/5 flex items-center px-6 gap-2">
-                            <div className="w-3 h-3 rounded-full bg-rose-500/20 border border-rose-500/50"></div>
-                            <div className="w-3 h-3 rounded-full bg-amber-500/20 border border-amber-500/50"></div>
-                            <div className="w-3 h-3 rounded-full bg-emerald-500/20 border border-emerald-500/50"></div>
-                            <div className="ml-4 text-xs font-mono text-slate-500 flex items-center gap-2">
-                                <Code2 size={12} />
-                                integration_builder
-                            </div>
-                        </div>
-
-                        <div className="p-8 md:p-12 grid lg:grid-cols-2 gap-12">
-
-                            {/* LEFT: INPUTS */}
-                            <div className="space-y-8">
-                                <div>
-                                    <div className="flex justify-between items-baseline mb-3">
-                                        <label className="text-sm font-bold text-slate-200 uppercase tracking-wide">
-                                            1. ID du Chauffeur
-                                        </label>
-                                        <div className="flex gap-2 text-[10px] font-mono">
-                                            <button onClick={() => fillMock('driver-123')} className="px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors">Mock: Valide</button>
-                                            <button onClick={() => fillMock('driver-456')} className="px-2 py-1 bg-rose-500/10 text-rose-400 rounded border border-rose-500/20 hover:bg-rose-500/20 transition-colors">Mock: Invalide</button>
-                                        </div>
-                                    </div>
-                                    <input
-                                        type="text"
-                                        className="w-full bg-[#020617] border border-white/10 rounded-xl p-4 text-white font-mono text-sm focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all placeholder:text-slate-600"
-                                        placeholder="ex: driver-123"
-                                        value={driverId}
-                                        onChange={(e) => setDriverId(e.target.value)}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-bold text-slate-200 uppercase tracking-wide mb-3">
-                                        2. URL de retour (Callback)
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="w-full bg-[#020617] border border-white/10 rounded-xl p-4 text-white font-mono text-sm focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all"
-                                        value={redirectUrl}
-                                        onChange={(e) => setRedirectUrl(e.target.value)}
-                                    />
-                                </div>
-
-                                <div className="pt-4">
-                                    <Link
-                                        href={`/connect?driverId=${driverId || 'driver-123'}&redirectUrl=${encodeURIComponent(redirectUrl)}`}
-                                        className="group w-full inline-flex items-center justify-center gap-3 px-6 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20"
-                                    >
-                                        Simuler l'expérience Utilisateur
-                                        <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                                    </Link>
-                                    <p className="text-center text-xs text-slate-500 mt-3">
-                                        Ouvre la page de conformité dans ce navigateur.
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* RIGHT: OUTPUT CODE */}
-                            <div className="relative flex flex-col h-full">
-
-                                <div className="flex justify-between items-end mb-3">
-                                    <label className="text-sm font-bold text-slate-200 uppercase tracking-wide">
-                                        3. Intégration
-                                    </label>
-
-                                    {/* --- SELECTEUR DE FORMAT (Tabs) --- */}
-                                    <div className="bg-white/5 rounded-lg p-1 flex gap-1 border border-white/5">
-                                        <button
-                                            onClick={() => setExportFormat('code')}
-                                            className={`px-3 py-1 text-[10px] font-bold uppercase rounded-md transition-all flex items-center gap-1.5 ${exportFormat === 'code' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
-                                        >
-                                            <Code2 size={12} />
-                                            Code
-                                        </button>
-                                        <button
-                                            onClick={() => setExportFormat('url')}
-                                            className={`px-3 py-1 text-[10px] font-bold uppercase rounded-md transition-all flex items-center gap-1.5 ${exportFormat === 'url' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
-                                        >
-                                            <LinkIcon size={12} />
-                                            URL
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="group relative bg-[#020617] border border-white/10 rounded-xl overflow-hidden flex-1 min-h-[220px] flex flex-col">
-
-                                    {/* Affichage Conditionnel */}
-                                    <div className="flex-1 p-6 overflow-x-auto scrollbar-hide">
-                                        {exportFormat === 'code' ? (
-                                            // VUE CODE JS
-                                            <div className="font-mono text-xs md:text-sm text-blue-100">
-                                                <span className="text-purple-400">const</span> <span className="text-blue-400">verificationLink</span> = <span className="text-green-400">`</span><br/>
-                                                &nbsp;&nbsp;{baseUrl}/connect?<br/>
-                                                &nbsp;&nbsp;driverId=<span className="text-yellow-400">${`{driverId}`}</span>&<br/>
-                                                &nbsp;&nbsp;redirectUrl=<span className="text-yellow-400">${`{callback}`}</span><br/>
-                                                <span className="text-green-400">`</span>;
-                                            </div>
-                                        ) : (
-                                            // VUE URL SIMPLE
-                                            <div className="font-mono text-xs md:text-sm text-slate-300 break-all">
-                                                {generatedLink}
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Copy Bar */}
-                                    <div className="border-t border-white/5 bg-white/[0.02] p-2 flex justify-between items-center">
-                                <span className="text-[10px] text-slate-500 px-3">
-                                    {exportFormat === 'code' ? 'TypeScript / JS Template' : 'HTTPS Standard Link'}
-                                </span>
-                                        <button
-                                            onClick={handleCopy}
-                                            className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-white text-xs font-bold rounded-lg transition-colors border border-white/5"
-                                        >
-                                            {copied ? <Check size={14} className="text-emerald-400"/> : <Copy size={14}/>}
-                                            {copied ? 'Copié !' : 'Copier'}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </motion.div>
-
-                {/* --- FEATURES GRID --- */}
-                <div className="mt-24 grid md:grid-cols-3 gap-8">
-                    <FeatureTile
-                        icon={<Globe className="text-blue-400" />}
-                        title="Hébergé & Sécurisé"
-                        desc="Infrastructure gérée par UGate. Certificats SSL et chiffrement bancaire inclus par défaut."
-                    />
-                    <FeatureTile
-                        icon={<Zap className="text-amber-400" />}
-                        title="Synchronisation Live"
-                        desc="Changements de statut (assurance, bannissement) répercutés en temps réel sur l'API."
-                    />
-                    <FeatureTile
-                        icon={<LayoutTemplate className="text-purple-400" />}
-                        title="Marque Blanche"
-                        desc="L'interface s'adapte à votre identité visuelle pour une expérience utilisateur fluide."
-                    />
-                </div>
-
-            </main>
-
-            {/* FOOTER */}
-            <footer className="border-t border-white/5 mt-20 bg-[#020617]">
-                <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-2 opacity-50">
-                        <ShieldCheck size={16} />
-                        <span className="text-sm font-semibold">YowYob UGate © 2025</span>
-                    </div>
-                    <div className="flex gap-6 text-sm text-slate-500">
-                        <a href="#" className="hover:text-white">Privacy</a>
-                        <a href="#" className="hover:text-white">Terms</a>
-                        <a href="#" className="hover:text-white">Contact API Support</a>
-                    </div>
-                </div>
-            </footer>
-        </div>
-    );
-}
-
-function FeatureTile({ icon, title, desc }: any) {
-    return (
-        <div className="p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group">
-            <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                {icon}
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2">{title}</h3>
-            <p className="text-sm text-slate-400 leading-relaxed">{desc}</p>
-        </div>
-    )
-}
-
-
-────────────────────────────────────────────────────────────────────────────────
 FICHIER: src\components\ComplianceCard.tsx
 TYPE: .tsx
-TAILLE: 13.97 KB
+TAILLE: 13.48 KB
 ────────────────────────────────────────────────────────────────────────────────
 'use client';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { OfficialProfile, ComplianceResponse } from '@/lib/types';
+import { OfficialProfile, ComplianceResponse } from '@/lib/type';
 import Image from 'next/image';
 import {
     BadgeCheck, Eye, ShieldCheck, AlertTriangle, HeartPulse,
@@ -8510,9 +8383,7 @@ export default function ComplianceDashboard({ profile, compliance, redirectUrl }
             >
                 <div className="bg-white rounded-[24px] shadow-[0_20px_40px_-12px_rgba(0,0,0,0.08)] border border-slate-100 flex flex-col lg:flex-row overflow-hidden ring-1 ring-slate-900/5">
 
-                    {/* =======================================================
-            COLONNE GAUCHE : IDENTITÉ (Épurée)
-           ======================================================= */}
+
                     <div className="w-full lg:w-[360px] bg-slate-50/30 p-8 flex flex-col items-center text-center border-r border-slate-100">
 
                         {/* Avatar */}
@@ -8556,9 +8427,7 @@ export default function ComplianceDashboard({ profile, compliance, redirectUrl }
                         </button>
                     </div>
 
-                    {/* =======================================================
-            COLONNE DROITE : DASHBOARD (Sophistiqué)
-           ======================================================= */}
+
                     <div className="flex-1 flex flex-col bg-white">
 
                         {/* 1. HEADER STATUT (Gradient sombre élégant) */}
@@ -8670,9 +8539,9 @@ export default function ComplianceDashboard({ profile, compliance, redirectUrl }
     );
 }
 
-// --- TUILE RAFFINÉE (Minimaliste) ---
+
 function CleanTile({ label, isValid, icon, detail, isWarning, theme }: any) {
-    // Détermination de la couleur de l'icône (Subtil)
+
     const statusColor = isValid ? 'text-teal-600' : isWarning ? 'text-amber-600' : 'text-rose-600';
     const statusBg = isValid ? 'bg-teal-50' : isWarning ? 'bg-amber-50' : 'bg-rose-50';
 
@@ -8712,7 +8581,7 @@ TAILLE: 16.63 KB
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FileText, Download, Maximize2, ChevronRight, UserSquare2, CarFront, ShieldCheck, ScanLine, ZoomIn } from 'lucide-react';
-import { OfficialProfile } from '@/lib/types';
+import { OfficialProfile } from '../lib/type';
 import Image from 'next/image';
 
 interface Props {
@@ -8976,6 +8845,85 @@ function DocThumbnail({ label, url, onClick }: { label: string, url?: string, on
 
 
 ────────────────────────────────────────────────────────────────────────────────
+FICHIER: src\components\ThemeProvider.tsx
+TYPE: .tsx
+TAILLE: 404 B
+────────────────────────────────────────────────────────────────────────────────
+"use client";
+
+import * as React from "react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+
+export function ThemeProvider({
+                                  children,
+                                  ...props
+                              }: React.ComponentProps<typeof NextThemesProvider>) {
+    return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FICHIER: src\components\ThemeToggle.tsx
+TYPE: .tsx
+TAILLE: 2.19 KB
+────────────────────────────────────────────────────────────────────────────────
+"use client";
+
+import { Moon, Sun, Laptop } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+
+export function ThemeToggle() {
+    const { setTheme, theme, resolvedTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return <div className="w-24 h-8 bg-slate-200 dark:bg-white/5 rounded-full animate-pulse" />;
+
+    return (
+        <div className="flex items-center p-1 bg-slate-200 dark:bg-white/10 rounded-full border border-slate-300 dark:border-white/5 shadow-inner transition-colors duration-300">
+            <button
+                onClick={() => setTheme("light")}
+                className={`p-1.5 rounded-full transition-all duration-300 ${
+                    theme === "light"
+                        ? "bg-white text-orange-500 shadow-md scale-110"
+                        : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                }`}
+                title="Mode Clair"
+            >
+                <Sun size={14} />
+            </button>
+            <button
+                onClick={() => setTheme("system")}
+                className={`p-1.5 rounded-full transition-all duration-300 ${
+                    theme === "system"
+                        ? "bg-white dark:bg-slate-600 text-blue-500 dark:text-blue-300 shadow-md scale-110"
+                        : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                }`}
+                title="Système"
+            >
+                <Laptop size={14} />
+            </button>
+            <button
+                onClick={() => setTheme("dark")}
+                className={`p-1.5 rounded-full transition-all duration-300 ${
+                    theme === "dark"
+                        ? "bg-slate-700 text-purple-400 shadow-md scale-110"
+                        : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                }`}
+                title="Mode Sombre"
+            >
+                <Moon size={14} />
+            </button>
+        </div>
+    );
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
 FICHIER: src\components\UGatePromoBanner.tsx
 TYPE: .tsx
 TAILLE: 1.83 KB
@@ -9105,7 +9053,7 @@ FICHIER: src\lib\api.ts
 TYPE: .ts
 TAILLE: 3.11 KB
 ────────────────────────────────────────────────────────────────────────────────
-import { ComplianceResponse, OfficialProfile } from './types';
+import { ComplianceResponse, OfficialProfile } from './type';
 import {
     MOCK_PROFILE_VALID, MOCK_COMPLIANCE_VALID,
     MOCK_PROFILE_INVALID, MOCK_COMPLIANCE_INVALID,
@@ -9205,7 +9153,7 @@ TYPE: .ts
 TAILLE: 1.79 KB
 ────────────────────────────────────────────────────────────────────────────────
 // src/lib/mock-data.ts
-import { ComplianceResponse, OfficialProfile } from './types';
+import { ComplianceResponse, OfficialProfile } from './type';
 
 export const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -9253,7 +9201,7 @@ export const MOCK_COMPLIANCE_INVALID: ComplianceResponse = {
 ────────────────────────────────────────────────────────────────────────────────
 FICHIER: src\lib\type.ts
 TYPE: .ts
-TAILLE: 1.06 KB
+TAILLE: 1.03 KB
 ────────────────────────────────────────────────────────────────────────────────
 // src/lib/types.ts
 
@@ -9264,7 +9212,6 @@ export interface OfficialProfile {
     lastName: string;
     photoUrl: string;
 
-    // Documents & Conformité
     cvUrl?: string;
     cniNumber: string;       // ex: "102938475"
     cniRectoUrl?: string;
@@ -9298,14 +9245,31 @@ export interface ComplianceResponse {
 
 
 ────────────────────────────────────────────────────────────────────────────────
+FICHIER: tsconfig.build.json
+TYPE: .json
+TAILLE: 92 B
+────────────────────────────────────────────────────────────────────────────────
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "skipLibCheck": true
+  }
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
 FICHIER: tsconfig.json
 TYPE: .json
-TAILLE: 670 B
+TAILLE: 766 B
 ────────────────────────────────────────────────────────────────────────────────
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -9322,8 +9286,11 @@ TAILLE: 670 B
         "name": "next"
       }
     ],
+    "baseUrl": ".", // ← AJOUTEZ CETTE LIGNE
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
   "include": [
@@ -9334,7 +9301,9 @@ TAILLE: 670 B
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
 
 
@@ -9342,13 +9311,13 @@ TAILLE: 670 B
 ================================================================================
 STATISTIQUES
 ================================================================================
-Nombre de fichiers analysés: 26
-Taille totale: 344.58 KB
+Nombre de fichiers analysés: 30
+Taille totale: 343.40 KB
 
 Répartition par type de fichier:
-  .tsx: 12 fichiers
+  .tsx: 15 fichiers
   .ts: 5 fichiers
-  .json: 3 fichiers
+  .json: 4 fichiers
   .local: 1 fichier
   sans extension: 1 fichier
   .md: 1 fichier
