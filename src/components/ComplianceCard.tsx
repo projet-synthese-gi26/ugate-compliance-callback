@@ -190,7 +190,7 @@ export default function ComplianceDashboard({ profile, compliance, redirectUrl }
                                 </div>
                             ) : (
                                 // CAS ÉCHEC : Redirection UGate
-                                <a href="https://ugate.yowyob.com" target="_blank" className="group flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer">
+                                <a href="https://ugate-frontend-bon.vercel.app/fr" target="_blank" className="group flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer">
                                     <div className="flex items-center gap-4">
                                         <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center border border-slate-200 text-slate-700">
                                             <ExternalLink size={20} />
