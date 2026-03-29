@@ -2,6 +2,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+    basePath: '/compliance',
+    assetPrefix: '/compliance',
     images: {
         remotePatterns: [
             {
