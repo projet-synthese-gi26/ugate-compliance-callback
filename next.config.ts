@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
             // ex: { protocol: 'https', hostname: 'api.yowyob.com' }
         ],
     },
+    output: 'standalone',
 };
 
 export default nextConfig;
